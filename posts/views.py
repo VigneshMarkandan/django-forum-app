@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse ,HttpResponseRedirect
 from .models import Post
-from .forms import PostFrom
+from .forms import PostForm
 
 def index(request):
     if request.method == 'POST':
-        form = PostFrom(request.POST)
+        form = PostForm(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('/')
@@ -18,5 +18,8 @@ def index(request):
     return render(request, 'posts.html',
                  { 'posts':posts} )
 def delete(request,post_id):
+    post = Post.objects.get(id=post_id)
+    post.delete()
+    return HttpResponseRedirect('/')
     output  = 'POST ID is'+str(post_id)
     return HttpResponse(output)               
